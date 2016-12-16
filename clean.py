@@ -3,6 +3,9 @@ import pandas as pd
 from sklearn.preprocessing import LabelEncoder
 from sklearn import cross_validation
 from sklearn.ensemble import RandomForestClassifier
+import matplotlib.pyplot as plt
+from sklearn.naive_bayes import GaussianNB
+from sklearn.neighbors import KNeighborsClassifier
 
 train=pd.read_csv('train.csv')
 test=pd.read_csv('test.csv')
@@ -84,8 +87,23 @@ scores2 = clf.score(train, labels)
 ### Now plot some data to analyze
 
 ## Apply Naive Bayes
+res=gnb.fit(train[['DayOfWeek', 'PdDistrict', 'X', 'Y', 'year', 'month', 'daypart', 'part_of_month']],train['Category'])\
+    .predict(train[['DayOfWeek', 'PdDistrict', 'X', 'Y', 'year', 'month', 'daypart', 'part_of_month']])
+a=((labels != res).sum())
+accuracy=float((len(train)-a)*100/len(train))
+print("Accuracy for GNB is:", accuracy)
 
-## Check PCA
+## Implement KNN
+neigh = KNeighborsClassifier(n_neighbors=3)
+neigh.fit(train, labels)
+ans=neigh.predict(train)
+a=((ans != labels).sum())
+accuracy=float((len(train)-a)*100/len(train))
+print("Accuracy for KNN is:", accuracy)
+print("Accuracy is seen to decrease as K increases")
+
+## Do I need PCA?
+
 
 ### Try Cross validation
 
